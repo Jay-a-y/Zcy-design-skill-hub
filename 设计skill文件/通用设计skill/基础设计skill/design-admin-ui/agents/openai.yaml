@@ -1,0 +1,4 @@
+interface:
+  display_name: "后台原型与视觉规范"
+  short_description: "把产品需求直接转成专业后台原型、可点击 Demo 与视觉规范"
+  default_prompt: "使用 $design-admin-ui 将以下产品需求输出为可点击后台 Demo，并补齐关键状态与验收截图。"

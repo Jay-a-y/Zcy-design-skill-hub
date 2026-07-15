@@ -1,0 +1,174 @@
+{
+  "recipes": {
+    "Dashboard": {
+      "readingOrder": "总体态势 -> 重点风险 -> 趋势变化 -> 详细数据",
+      "required": [
+        "PageHeader",
+        "StatisticPanel",
+        "BusinessTable"
+      ],
+      "optional": [
+        "TrendChart",
+        "AnalysisPanel"
+      ],
+      "sequence": [
+        "PageHeader",
+        "StatisticPanel",
+        "TrendChart / AnalysisPanel",
+        "BusinessTable"
+      ]
+    },
+    "ListPage": {
+      "readingOrder": "搜索范围 -> 统计概览 -> 数据列表 -> 操作处理",
+      "required": [
+        "PageHeader",
+        "SearchPanel",
+        "Toolbar",
+        "DataTable",
+        "Pagination"
+      ],
+      "optional": [
+        "StatisticPanel"
+      ],
+      "sequence": [
+        "PageHeader",
+        "SearchPanel",
+        "StatisticPanel(optional)",
+        "Toolbar",
+        "DataTable",
+        "Pagination"
+      ],
+      "stateCoverage": [
+        "loading",
+        "empty",
+        "filtered-empty",
+        "error",
+        "permission",
+        "selection"
+      ]
+    },
+    "DetailPage": {
+      "readingOrder": "概要 -> 主体信息 -> 关联信息 -> 操作记录",
+      "required": [
+        "PageHeader",
+        "OverviewCard",
+        "DescriptionList"
+      ],
+      "optional": [
+        "RelatedTable",
+        "Timeline"
+      ],
+      "sequence": [
+        "PageHeader",
+        "OverviewCard",
+        "DescriptionList",
+        "RelatedTable / Timeline"
+      ],
+      "stateCoverage": [
+        "loading",
+        "missing-section",
+        "attachment-error",
+        "permission"
+      ]
+    },
+    "Form": {
+      "readingOrder": "页面定位 -> 表单分组 -> 操作提交",
+      "required": [
+        "PageHeader",
+        "FormCard",
+        "FormGroup",
+        "ActionBar"
+      ],
+      "optional": [],
+      "sequence": [
+        "PageHeader",
+        "FormCard",
+        "FormGroup",
+        "ActionBar"
+      ]
+    },
+    "Dialog": {
+      "readingOrder": "任务标题 -> 内容 -> 底部操作",
+      "required": [
+        "DialogTitle",
+        "Content",
+        "FooterAction"
+      ],
+      "optional": [],
+      "sequence": [
+        "DialogTitle",
+        "Content",
+        "FooterAction"
+      ],
+      "stateCoverage": [
+        "validation-error",
+        "submitting",
+        "submit-failed",
+        "disabled"
+      ]
+    },
+    "EmptyState": {
+      "readingOrder": "当前范围 -> 空状态原因 -> 可执行动作",
+      "required": [
+        "PageHeader",
+        "Empty",
+        "OptionalAction"
+      ],
+      "optional": [
+        "SearchPanel",
+        "PermissionHint"
+      ],
+      "sequence": [
+        "PageHeader",
+        "SearchPanel(optional)",
+        "Empty",
+        "OptionalAction"
+      ],
+      "stateCoverage": [
+        "no-data",
+        "filtered-empty",
+        "no-permission",
+        "load-failed"
+      ]
+    },
+    "MixedWorkflow": {
+      "readingOrder": "流程定位 -> 当前任务 -> 业务表单/详情 -> 处理记录 -> 下一步操作",
+      "required": [
+        "PageHeader",
+        "WorkflowSteps",
+        "BusinessSection",
+        "FooterAction"
+      ],
+      "optional": [
+        "DescriptionList",
+        "FormGroup",
+        "Timeline",
+        "RelatedTable",
+        "Drawer"
+      ],
+      "sequence": [
+        "PageHeader",
+        "WorkflowSteps",
+        "BusinessSection",
+        "Timeline(optional)",
+        "FooterAction"
+      ],
+      "stateCoverage": [
+        "loading",
+        "validation-error",
+        "saving",
+        "permission",
+        "closed"
+      ]
+    }
+  },
+  "selectionRules": {
+    "Dashboard": "用于总体态势、关键指标、风险趋势和明细数据。",
+    "ListPage": "用于可筛选、可分页、以表格为主体的数据管理页面。",
+    "DetailPage": "用于单个监管对象、事件、项目或记录的详情查看。",
+    "Form": "用于创建、编辑、提交监管相关信息。",
+    "Dialog": "用于局部任务、确认或短流程处理。",
+    "EmptyState": "用于无数据、筛选为空、无权限或加载失败的局部状态。",
+    "MixedWorkflow": "用于包含详情、表单、附件、流转和下一步处理的复合业务流程。"
+  }
+}

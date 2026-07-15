@@ -1,0 +1,4 @@
+interface:
+  display_name: "乐采云随项目设计"
+  short_description: "根据云随需求文档复用项目规范并生成完整页面 Demo"
+  default_prompt: "使用 $yunsui-design 读取本次需求，在已沉淀的云随规则和样板范围内生成单 HTML Demo；若存在未覆盖的复杂核心页面，列出设计缺口。"
