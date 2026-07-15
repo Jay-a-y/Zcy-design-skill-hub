@@ -5,21 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="ZCY Design Skill Hub，集中展示并下载基础设计 skill 与项目级设计 skill。"
+      content="Design Skill Hub，集中展示并下载基础设计 skill 与项目级设计 skill。"
     />
-    <title>ZCY Design Skill Hub</title>
+    <title>Design Skill Hub</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#top" aria-label="ZCY Design Skill Hub 首页">
-        <span class="brand-mark" aria-hidden="true">Z</span>
-        <span>ZCY Design Skill Hub</span>
+      <a class="brand" href="#top" aria-label="Design Skill Hub 首页">
+        <img class="brand-logo" src="./assets/le-logo.svg" alt="" aria-hidden="true" />
+        <span>Design Skill Hub</span>
       </a>
       <nav class="nav-links" aria-label="页面导航">
         <a href="#skills">Skills</a>
-        <a href="#workflow">Updates</a>
-        <a href="https://github.com/Jay-a-y/Zcy-design-skill-hub" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
     </header>
 
@@ -32,52 +30,9 @@
             收纳基础设计规范与项目级设计知识包。页面保持一个层级，所有 skill 都能直接下载，用 Git 记录版本，用静态站点完成内网分发。
           </p>
           <div class="hero-actions" aria-label="主要操作">
-            <a class="button-primary" href="#skills">查看 Skill</a>
-            <a class="button-secondary" href="./downloads/base-design-skill.zip" download>下载基础包</a>
+            <a class="button-primary" href="#skills">查看 Skill 下载</a>
           </div>
         </div>
-
-        <div class="hero-panel" aria-label="资源概览">
-          <div class="metric metric-dark">
-            <span class="metric-value">3</span>
-            <span class="metric-label">已收录 skill</span>
-          </div>
-          <div class="metric metric-purple">
-            <span class="metric-value">1</span>
-            <span class="metric-label">基础设计 skill</span>
-          </div>
-          <div class="metric metric-blue">
-            <span class="metric-value">2</span>
-            <span class="metric-label">项目级设计 skill</span>
-          </div>
-          <div class="metric metric-green">
-            <span class="metric-value">2026.07.15</span>
-            <span class="metric-label">最近更新</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="showcase-band" aria-label="精选资源">
-        <article class="feature-tile feature-dark">
-          <p class="eyebrow">FOUNDATION</p>
-          <h2>基础设计 skill 是整个合集的默认底座。</h2>
-          <p>
-            面向后台、管理端、数据密集页面和设计评审场景，沉淀组件证据、布局规则、交互状态和视觉基线。
-          </p>
-          <a href="./downloads/base-design-skill.zip" download>下载基础设计 skill <span aria-hidden="true">↓</span></a>
-        </article>
-        <article class="feature-tile feature-purple">
-          <span class="tile-number">71</span>
-          <p>基础包文件</p>
-        </article>
-        <article class="feature-tile feature-orange">
-          <span class="tile-number">210</span>
-          <p>监管平台文件</p>
-        </article>
-        <article class="feature-tile feature-blue">
-          <span class="tile-number">19</span>
-          <p>云随项目文件</p>
-        </article>
       </section>
 
       <section class="library-band" id="skills" aria-labelledby="library-title">
@@ -194,39 +149,10 @@
         <p class="empty-state" id="empty-state" hidden>没有匹配的 skill。</p>
       </section>
 
-      <section class="workflow-band" id="workflow" aria-labelledby="workflow-title">
-        <div class="section-heading">
-          <p class="eyebrow">UPDATE FLOW</p>
-          <h2 id="workflow-title">后续更新保持 Git 驱动。</h2>
-        </div>
-        <div class="workflow-list">
-          <div>
-            <span>01</span>
-            <h3>新增文件</h3>
-            <p>把新的 skill 文件夹放入对应分类。</p>
-          </div>
-          <div>
-            <span>02</span>
-            <h3>重新打包</h3>
-            <p>更新 `downloads/` 里的 zip 下载包。</p>
-          </div>
-          <div>
-            <span>03</span>
-            <h3>更新页面</h3>
-            <p>补齐卡片信息、说明链接和统计数据。</p>
-          </div>
-          <div>
-            <span>04</span>
-            <h3>提交推送</h3>
-            <p>通过本地 Git 推送到 GitHub，再由内网部署同步。</p>
-          </div>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">
-      <span>ZCY Design Skill Hub</span>
-      <span>Static skill library · Git maintained · Intranet ready</span>
+      <span>Design Skill Hub</span>
     </footer>
 
     <script src="./script.js"></script>
