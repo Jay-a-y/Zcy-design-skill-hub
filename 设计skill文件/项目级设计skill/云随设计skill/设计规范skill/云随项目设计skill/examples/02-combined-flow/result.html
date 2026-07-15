@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>乐采云随｜完整流程 Demo</title>
+  <style>
+    :root{
+      --ud-brand:#0052d9;--ud-brand-hover:#366ef4;--ud-brand-active:#003cab;--ud-brand-light:#f2f3ff;
+      --ud-success:#2ba471;--ud-success-light:#e3f9e9;--ud-warning:#e37318;--ud-warning-light:#fff5e4;
+      --ud-error:#d54941;--ud-error-light:#fff0ed;--ud-text:#111;--ud-text-2:rgba(0,0,0,.6);
+      --ud-text-3:rgba(0,0,0,.4);--ud-border:#dcdcdc;--ud-divider:#e7e7e7;--ud-bg:#f3f3f3;
+      --scale:1;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#777;color:var(--ud-text);font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .stage{position:absolute;left:50%;top:50%;width:1440px;height:900px;transform:translate(-50%,-50%) scale(var(--scale));transform-origin:center;background:#777;overflow:hidden}
+    .workbench{position:absolute;left:0;top:0;width:1440px;height:900px;background:var(--ud-bg);overflow:hidden}
+    .brandbar{height:64px;background:linear-gradient(90deg,#3154e5,#4769f3);display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:#fff}
+    .brand-left,.brand-actions,.inline,.row{display:flex;align-items:center}
+    .brand-left{gap:16px}.brand-mark{display:flex;align-items:center;gap:5px;font-size:18px;font-weight:700}.logo{width:24px;height:28px}
+    .project-meta{width:470px;line-height:22px}.project-name{font-size:14px;font-weight:600}.project-org{font-size:14px;color:#f2f3ff}
+    .brand-actions{gap:14px}.account{height:34px;padding:0 13px;border:1px solid rgba(255,255,255,.65);border-radius:18px;background:transparent;color:#fff}.bar-sep{opacity:.55}.close-btn{border:0;background:transparent;color:#fff;font-size:25px;line-height:1}
+    .featurebar{height:60px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid #f0f0f0}
+    .feature-left{display:flex;align-items:center;gap:20px}.back{border:0;background:transparent;color:var(--ud-brand);padding:0}.feature-title{font-size:20px;font-weight:600}
+    .disclaimer{font-size:14px;color:var(--ud-text-2);background:#f5f5f5;border-radius:16px;padding:5px 10px}
+    .page-area{height:776px;overflow:auto;padding:16px;background:var(--ud-bg)}
+    .page-area.home-area{height:836px;padding:0;background:#f7f7fc;overflow:auto}
+    .surface{min-height:744px;background:#fff;border-radius:8px;border:1px solid #eee;padding:24px;position:relative}
+    .home{padding:40px}.hero-title{font-size:36px;line-height:44px;font-weight:600;margin:0 0 8px}.hero-title b{color:var(--ud-brand)}
+    .hero-sub{font-size:18px;line-height:26px;color:var(--ud-text-3);margin:0}.divider{height:1px;background:var(--ud-divider);margin-top:26px}
+    .service-grid{display:grid;grid-template-columns:repeat(4,250px);gap:28px 40px;margin-top:31px}
+    .service-card{height:186px;border:0;border-radius:16px;background:#fff;padding:24px;text-align:left;box-shadow:0 4px 8px rgba(0,0,0,.04);transition:.15s;position:relative;color:inherit}
+    .service-card:not(.disabled):hover{transform:translateY(-1px);box-shadow:0 8px 8px rgba(0,0,0,.12)}
+    .service-card.disabled{cursor:not-allowed}.service-icon{width:48px;height:48px;border-radius:4px;background:var(--ud-brand-light);color:var(--ud-brand);display:flex;align-items:center;justify-content:center}
+    .service-card.disabled .service-icon,.service-card.disabled .status,.service-card.disabled .arrow{background:#f3f3f3;color:#8b8b8b}
+    .service-title{font-size:24px;line-height:32px;font-weight:600;margin:8px 0 2px}.service-desc{font-size:14px;line-height:20px;color:var(--ud-text-2);height:40px}
+    .service-foot{position:absolute;left:24px;right:18px;bottom:19px;display:flex;justify-content:space-between;align-items:center}.status{padding:2px 10px;border-radius:4px;background:var(--ud-brand-light);color:#525cff;font-size:12px}.arrow{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--ud-brand-light);color:#525cff}
+    .control{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);min-height:44px;max-width:1120px;background:rgba(25,25,25,.92);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:6px 12px;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:70;display:flex;align-items:center;gap:14px;backdrop-filter:blur(10px)}
+    .control-title{display:flex;align-items:center;gap:7px;white-space:nowrap;color:#d6d6d6;font-size:13px}.control-title b{color:#fff;font-weight:600}
+    .control h2,.control p{display:none}.control-section{display:flex;align-items:center;gap:8px}.control-label{font-size:12px;color:#a9a9a9;white-space:nowrap}.control-grid{display:flex;gap:4px}.control button,.control select{min-height:32px;border-radius:16px;border:0;background:transparent;color:#d6d6d6;padding:0 12px;text-align:center;white-space:nowrap}.control select{width:170px;border:1px solid rgba(255,255,255,.14);background:#303030;text-align:left}.control button:hover{background:rgba(255,255,255,.08)}.control button.active{background:var(--ud-brand);color:#fff}.control .hide-control{width:30px;height:30px;min-height:30px;border-radius:50%;padding:0;color:#bbb}.control-handle{display:none;position:absolute;left:50%;bottom:24px;transform:translateX(-50%);z-index:70;border:0;border-radius:22px;background:rgba(25,25,25,.92);color:#fff;padding:10px 18px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+    .btn{height:40px;padding:0 20px;border-radius:3px;border:1px solid var(--ud-brand);background:#fff;color:var(--ud-brand);display:inline-flex;align-items:center;justify-content:center;gap:6px}.btn.primary{background:var(--ud-brand);color:#fff}.btn.primary:hover{background:var(--ud-brand-hover)}.btn.small{height:32px;padding:0 14px}.btn:disabled{background:#d9e1ff;border-color:#d9e1ff;color:#fff;cursor:not-allowed}
+    .center-state{min-height:680px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.illus{width:205px;height:150px;margin-bottom:10px}.state-title{font-size:24px;line-height:32px;font-weight:600;margin:8px 0}.state-desc{font-size:14px;line-height:22px;color:var(--ud-text-2);margin:0 0 20px}.actions{display:flex;gap:16px;justify-content:center}
+    .ready{padding-top:164px;text-align:center}.ready-kicker{display:inline-block;padding:4px 12px;background:#f7f7ff;color:#525cff;border-radius:3px}.ready h2{font-size:36px;line-height:48px;margin:24px 0 28px}.ready h2 b{color:var(--ud-brand)}
+    .ability-grid{display:grid;grid-template-columns:repeat(3,280px);gap:24px;justify-content:center;margin-top:52px}.ability{height:172px;background:#f3f7ff;border-radius:14px;padding:30px 24px;text-align:left}.ability h3{font-size:20px;color:var(--ud-brand);margin:0 0 8px}.ability p{font-size:16px;line-height:24px;color:var(--ud-text-2);margin:0}
+    .alert{min-height:48px;border:1px solid #a6c8ff;background:#edf5ff;color:#2b4b7c;border-radius:4px;padding:12px 16px;display:flex;align-items:center;gap:10px}.alert.success{border-color:#b9edc7;background:var(--ud-success-light);color:#196b3b}.alert.warning{border-color:#f3cf96;background:var(--ud-warning-light);color:#8e530b}.alert.error{border-color:#ffc9c3;background:var(--ud-error-light);color:#9b2722}
+    .upload-zone{height:340px;border:2px dashed #c6d4e5;border-radius:8px;margin-top:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#fff}.upload-icon{color:var(--ud-brand);width:54px;height:54px}.upload-zone h2{font-size:24px;margin:12px 0}.upload-zone p{font-size:16px;color:var(--ud-text-2);margin:0 0 14px}.upload-zone small{font-size:14px;color:#8da0bb}
+    .file-picker{position:absolute;opacity:0;pointer-events:none}.project-heading{font-size:20px;line-height:28px;font-weight:600;margin:0 0 6px}.project-code{color:var(--ud-text-3);margin:0 0 18px}.section{border:1px solid var(--ud-border);border-radius:10px;padding:16px;margin-top:16px}.section-title{font-size:16px;font-weight:600;border-left:2px solid var(--ud-brand);padding-left:8px;margin:0 0 16px}.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.info-box{background:#f8f9fb;border:1px solid var(--ud-border);border-radius:10px;padding:13px}.info-box span{display:block;color:var(--ud-text-2);font-size:14px}.info-box b{display:block;margin-top:6px;font-size:16px}
+    .queue-list{display:grid;gap:12px}.file-row{display:grid;grid-template-columns:1fr 74px 120px;align-items:center;gap:16px;min-height:44px}.file-main{display:flex;align-items:center;gap:10px}.file-meta{font-size:12px;color:var(--ud-text-3)}.tag{display:inline-flex;align-items:center;height:26px;padding:0 9px;border-radius:3px;background:var(--ud-brand-light);color:var(--ud-brand);font-size:13px}.tag.success{background:var(--ud-success-light);color:var(--ud-success)}.tag.error{background:var(--ud-error-light);color:var(--ud-error)}
+    .progress{height:4px;background:#e7e7e7;border-radius:4px;overflow:hidden}.progress>i{display:block;height:100%;background:var(--ud-brand);width:0;transition:width .35s}.progress.success>i{background:var(--ud-success)}
+    .pipeline-head{display:grid;grid-template-columns:110px repeat(3,1fr);gap:16px;align-items:end}.big-percent{font-size:48px;color:var(--ud-brand);font-weight:700}.current-line{color:var(--ud-text-2);margin:8px 0 18px}.task-list{display:grid;gap:14px}.task{display:grid;grid-template-columns:52px 1fr 80px;gap:16px;align-items:center;padding:16px;border:1px solid var(--ud-border);border-radius:12px;background:#f8f9fb}.task.done{border-color:#b9edc7;background:var(--ud-success-light)}.task.active{border-color:var(--ud-brand);background:var(--ud-brand-light)}.task strong{font-size:18px}.task p{margin:5px 0 10px;color:var(--ud-text-3);font-size:13px}.task-status{text-align:right;font-size:14px}.spin{width:18px;height:18px;border:2px solid #a6c8ff;border-top-color:var(--ud-brand);border-radius:50%;animation:spin 1s linear infinite;display:inline-block}@keyframes spin{to{transform:rotate(360deg)}}
+    .result-summary{display:grid;grid-template-columns:1fr 1fr;gap:24px}.metric-card{border:1px solid #d7e0ef;border-left:5px solid var(--ud-error);border-radius:10px;padding:24px}.metric-card.good{border-left-color:#52c41a}.metric-card .metric{font-size:40px;margin:12px 0}.note{border:1px solid #d7e0ef;border-radius:8px;padding:20px;margin-top:24px;color:#41536e;line-height:28px}
+    .risk-card{border:1px solid #cddbf0;border-left:5px solid var(--ud-brand);border-radius:8px;padding:20px;margin-top:20px}.risk-head{display:flex;justify-content:space-between;align-items:center}.risk-card h3{margin:10px 0}.evidence{background:#f8fafc;border:1px solid #d7e0ef;border-radius:8px;padding:14px;margin-top:10px}.evidence small{display:block;color:#8da0bb;margin-bottom:6px}
+    .tabs{display:flex;gap:12px;border-bottom:1px solid var(--ud-divider);margin:16px 0}.tab{border:0;background:transparent;padding:10px 4px;color:var(--ud-text-2)}.tab.active{color:var(--ud-brand);border-bottom:2px solid var(--ud-brand);font-weight:600}.vendor-tabs{display:flex;gap:12px;flex-wrap:wrap}.vendor{border:1px solid #d7e0ef;border-radius:6px;background:#f7f9fc;padding:10px 16px}.vendor.active{border-color:var(--ud-brand);color:var(--ud-brand);background:#fff}
+    .criteria{display:grid;gap:12px}.criterion{border:1px solid #d7e0ef;border-radius:8px;padding:16px}.criterion h3{font-size:16px;margin:0 0 10px}.criterion p{background:#f7f9fc;border:1px solid #d7e0ef;border-radius:6px;padding:12px;color:#53657e;margin:0}
+    .extract-layout{display:grid;grid-template-columns:548px 1fr;gap:24px}.document-preview{height:696px;border:1px solid var(--ud-border);border-radius:12px;padding:40px;background:linear-gradient(#fff,#fbfbfb);position:relative;overflow:hidden}.document-preview h1{text-align:center;font-size:48px;letter-spacing:12px;margin:140px 0 30px}.document-preview h3{text-align:center}.doc-fields{margin:80px auto 0;width:330px;line-height:36px}.wave{position:absolute;left:-40px;bottom:-90px;width:700px;height:190px;border-radius:50%;background:linear-gradient(20deg,#65a8ff,#004ee8);transform:rotate(8deg)}.parse-panel{border:1px solid var(--ud-border);border-radius:12px;overflow:hidden}.parse-step{padding:18px 20px;border-bottom:1px solid var(--ud-divider)}.parse-step h3{font-size:16px;margin:0 0 12px}.parse-step p{font-size:14px;color:var(--ud-text-2);margin:8px 0}.parse-step:last-child{border-bottom:0}
+    .extract-result{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field-card{border:1px solid var(--ud-border);border-radius:8px;padding:14px}.field-card span{font-size:13px;color:var(--ud-text-3)}.field-card b{display:block;margin-top:6px}.field-card.warn{border-color:#f3cf96;background:#fffaf0}
+    .drawer-mask{position:absolute;inset:0;background:rgba(0,0,0,.58);z-index:40}.drawer{position:absolute;right:0;top:0;width:1070px;height:900px;background:#fff;z-index:41;box-shadow:-8px 0 24px rgba(0,0,0,.15);display:flex;flex-direction:column}.drawer-head{height:56px;border-bottom:1px solid var(--ud-divider);padding:0 18px;display:flex;align-items:center;justify-content:space-between;font-weight:600}.drawer-body{padding:24px;overflow:auto;flex:1}.drawer-foot{height:60px;border-top:1px solid var(--ud-divider);display:flex;align-items:center;justify-content:space-between;padding:0 24px}.check-group{border:1px solid var(--ud-border);border-radius:10px;overflow:hidden;margin-top:16px}.check-title{padding:12px 16px;background:#fafafa;border-bottom:1px solid var(--ud-divider);font-weight:600}.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px}.check-item{border:1px solid var(--ud-border);border-radius:8px;padding:14px}.check-item label{display:flex;gap:10px;align-items:flex-start}.check-item p{margin:8px 0 0 25px}.check-item .tag{margin-right:6px}
+    .bottom-actions{position:sticky;bottom:-24px;background:#fff;border-top:1px solid var(--ud-divider);padding:14px 0 0;margin-top:24px;display:flex;justify-content:flex-end;gap:16px}
+    .toast{position:absolute;right:24px;top:78px;z-index:60;min-width:280px;background:#fff;border-radius:6px;border:1px solid var(--ud-divider);box-shadow:0 8px 24px rgba(0,0,0,.16);padding:14px;display:none}.toast.show{display:block}
+    .host-page{background:#f6f7fa}.host-grid{display:grid;grid-template-columns:220px 1fr;height:744px}.host-side{border-right:1px solid #ddd;padding:20px;background:#fff}.host-side div{padding:12px;color:#555}.host-side .active{color:#1677ff;background:#eaf3ff}.host-main{padding:20px}.host-banner{background:#fff;border-radius:6px;padding:20px}.host-content{background:#fff;margin-top:12px;padding:20px;min-height:530px}.form-table{width:100%;border-collapse:collapse}.form-table td{border:1px solid #ddd;padding:12px}.form-table td:nth-child(odd){background:#f5f5f5;text-align:right;width:18%}.ai-label{display:inline-block;background:#eef4ff;color:#1677ff;border-radius:3px;padding:2px 6px;font-size:12px;margin-left:6px}
+    .hidden{display:none!important}
+  </style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <aside class="control" id="control">
+      <div class="control-title"><span>DEMO</span><b>演示控制台</b></div>
+      <h2>完整流程演示</h2>
+      <p>控制区位于云随工作台之外，可隐藏后对照 Figma 画板。</p>
+      <div class="control-section">
+        <span class="control-label">项目阶段</span>
+        <div class="control-grid" id="stageButtons"></div>
+      </div>
+      <div class="control-section">
+        <span class="control-label">身份</span>
+        <div class="control-grid" id="roleButtons"></div>
+      </div>
+      <div class="control-section">
+        <span class="control-label">页面</span>
+        <select id="shortcut"></select>
+      </div>
+      <button class="hide-control" onclick="toggleControl(false)" title="隐藏演示控制台">×</button>
+    </aside>
+    <button class="control-handle" id="controlHandle" onclick="toggleControl(true)">DEMO 演示控制台</button>
+    <main class="workbench" id="workbench"></main>
+    <div class="toast" id="toast"></div>
+  </div>
+  <input class="file-picker" id="filePicker" type="file" accept=".pdf,.doc,.docx" />
+  <script>
+  (()=>{
+    const STAGES=['需求确定','文件编制','开标流程','评标','履约'];
+    const ROLES=['采购人/代理机构','评审专家'];
+    const SERVICES=[
+      {id:'extract',title:'采购文件提取',desc:'从招标文件识别字段，回填业务表单',icon:'file',stages:['文件编制']},
+      {id:'inspect',title:'采购文件检测',desc:'根据业务需求执行检测服务，结果内联到字段',icon:'shield',stages:['文件编制']},
+      {id:'recommend',title:'内容推荐',desc:'评分办法 / 资格审查 / 符合性审查',icon:'article',stages:['文件编制']},
+      {id:'collusion',title:'围串标审查',desc:'智能识别围标串标行为，多维度异常分析',icon:'eye',stages:['开标流程']},
+      {id:'evaluate',title:'辅助评标',desc:'AI 辅助评审投标文件，智能评分建议与对比分析',icon:'task',stages:['评标'],expert:true}
+    ];
+    const project={
+      name:'机关单位办公设备批量采购项目（模拟项目）',code:'ZF-MN-20260626',method:'公开招标',buyer:'XX市政务服务中心（模拟）',agency:'XX工程咨询管理有限公司（模拟）',budget:'288,000.00',deadline:'2026-07-17 10:00',delivery:'15个日历日'
+    };
+    const state={stage:'文件编制',role:ROLES[0],page:'home',service:null,progress:30,timer:null,drawer:false};
+    const shortcuts=[
+      ['home','首页服务矩阵'],['extract-upload','采购文件提取｜上传'],['extract-loading','采购文件提取｜处理中'],['extract-result','采购文件提取｜结果'],['extract-fail','采购文件提取｜失败'],
+      ['inspect-wait','采购文件检测｜等待业务请求'],['inspect-ready','采购文件检测｜材料就绪'],['inspect-loading','采购文件检测｜处理中'],['inspect-result','采购文件检测｜结果'],
+      ['collusion-ready','围串标审查｜可发起'],['collusion-loading','围串标审查｜处理中'],['collusion-result','围串标审查｜结果'],
+      ['evaluate-ready','辅助评标｜等待开启'],['evaluate-loading','辅助评标｜处理中'],['evaluate-result','辅助评标｜结果'],
+      ['queue','特殊状态｜并发排队'],['timeout','特殊状态｜执行超时'],['history','特殊状态｜历史无记录'],['unavailable','特殊状态｜阶段不可用'],
+      ['host-tip','宿主改造｜免费使用提示'],['host-filled','宿主改造｜AI已回填']
+    ];
+
+    const icon=(name,size=28)=>{
+      const common=`width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"`;
+      const paths={
+        file:'<path d="M6 2h8l4 4v16H6z"/><path d="M14 2v5h5M9 12h6M9 16h6"/>',
+        shield:'<path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"/><path d="M9 12l2 2 4-5"/>',
+        article:'<path d="M5 3h14v18H5z"/><path d="M8 8h8M8 12h5M8 16h7"/>',
+        eye:'<path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/>',
+        task:'<path d="M7 3h10v4H7z"/><path d="M5 5h14v17H5zM8 11h8M8 15h8M8 19h5"/>',
+        user:'<circle cx="12" cy="8" r="3"/><path d="M5 21c.5-5 3-7 7-7s6.5 2 7 7"/>',
+        upload:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v5h16v-5"/>',
+        folder:'<path d="M3 6h7l2 2h9v11H3z"/>',
+        search:'<circle cx="10" cy="10" r="6"/><path d="M15 15l6 6"/>'
+      };return `<svg ${common}>${paths[name]||paths.file}</svg>`;
+    };
+    const logo=()=>`<svg class="logo" viewBox="0 0 24 28" fill="none" aria-hidden="true"><path d="M12 1l2.5 5.2L20 8.5l-5.5 2.2L12 16l-2.5-5.3L4 8.5l5.5-2.3L12 1z" fill="white"/><path d="M2 17c3 1.7 6.5 2.5 10 2.5S19 18.7 22 17c-1 6-4.5 9-10 9S3 23 2 17z" fill="white"/></svg>`;
+    const illus=(type)=>{
+      const variants={lock:['#dfeeff','M72 64v-17c0-24 36-24 36 0v17','M62 64h56v47H62z'],fail:['#eaf3ff','M49 74l28-26 55 7 21 35-40 24-54-8z'],queue:['#e8f2ff','M53 103c17-30 39-49 70-42 25 6 30 31 9 44-23 14-58 14-79-2z'],history:['#edf5ff','M53 75h76v44H53z']};
+      const v=variants[type]||variants.lock;
+      return `<svg class="illus" viewBox="0 0 180 140" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8fc1ff"/><stop offset="1" stop-color="#0052d9"/></linearGradient></defs><ellipse cx="90" cy="113" rx="67" ry="14" fill="${v[0]}"/><path d="${v[1]}" stroke="url(#g)" stroke-width="11" stroke-linejoin="round"/><path d="${v[2]}" fill="url(#g)" opacity=".9"/><circle cx="90" cy="86" r="8" fill="#fff" opacity=".95"/><path d="M90 93v9" stroke="#fff" stroke-width="4"/></svg>`;
+    };
+    const header=(title)=>`<div class="brandbar"><div class="brand-left"><div class="brand-mark">${logo()}<span>云随</span></div><div class="project-meta"><div class="project-name">${project.name}【${project.method}】</div><div class="project-org">${project.buyer}</div></div></div><div class="brand-actions"><button class="account">${icon('user',18)} 账户管理</button><span class="bar-sep">|</span><button class="close-btn" title="关闭">×</button></div></div>${title?`<div class="featurebar"><div class="feature-left"><button class="back" onclick="goHome()">← 返回</button><span class="feature-title">${title}</span></div><span class="disclaimer">ⓘ 内容由AI生成，结果仅供参考</span></div>`:''}`;
+    const btn=(text,action,primary=true,extra='')=>`<button class="btn ${primary?'primary':''} ${extra}" onclick="${action}">${text}</button>`;
+    const available=(s)=>s.stages.includes(state.stage)&&(!s.expert||state.role===ROLES[1]);
+    const home=()=>{
+      const can=SERVICES.filter(available).map(x=>x.title);
+      const phrase=can.length?`可使用${can.join('、')}等服务，点击卡片开始`:'当前阶段暂无可发起的云随服务，可查看历史记录';
+      return `${header('')}<div class="page-area home-area"><div class="home"><h1 class="hero-title">当前处于 <b>${state.stage}</b> 阶段</h1><p class="hero-sub">${phrase}</p><div class="divider"></div><div class="service-grid">${SERVICES.map(s=>`<button class="service-card ${available(s)?'':'disabled'}" ${available(s)?`onclick="openService('${s.id}')"`:`onclick="showUnavailable('${s.title}')"`}><div class="service-icon">${icon(s.icon,32)}</div><div class="service-title">${s.title}</div><div class="service-desc">${s.desc}</div><div class="service-foot"><span class="status">◉ ${available(s)?'当前可用':'当前阶段不可用'}</span><span class="arrow">›</span></div></button>`).join('')}</div></div></div>`;
+    };
+    const feature=(title,body)=>`${header(title)}<div class="page-area"><section class="surface">${body}</section></div>`;
+    const readyPage=(service,title,subtitle,abilities)=>feature(service,`<div class="ready"><span class="ready-kicker">✦ AI ${service==='围串标审查'?'反串标':'评审'}引擎已就位，随时开始</span><h2>开启 <b>${title}</b>，${subtitle}</h2>${btn(`▱ 开启${service}`,`startLoading('${service}')`)}<div class="ability-grid">${abilities.map(a=>`<div class="ability"><h3>${a[0]}</h3><p>${a[1]}</p></div>`).join('')}</div></div>`);
+    const unavailable=(service)=>feature(service,`<div class="center-state">${illus('lock')}<h2 class="state-title">当前阶段暂不可使用</h2><p class="state-desc">${service}仅在「${service==='围串标审查'?'开标流程':'评标'}」开放。<br>当前项目处于「${state.stage}」阶段，暂无法发起。</p>${btn('返回首页','goHome()')}</div>`);
+    const extractUpload=()=>feature('采购文件提取',`<div class="alert">ⓘ 支持在业务系统未上传采购文件前独立使用。仅本次有效，关闭工作台后结果不保留。</div><div class="upload-zone" onclick="document.getElementById('filePicker').click()">${icon('file',52)}<h2>上传采购文件</h2><p>拖拽文件到此 或 <span style="color:var(--ud-brand)">点击选择</span></p><small>支持 PDF / DOC / DOCX 等常用格式，单文件最大 2GB</small></div>`);
+    const extractLoading=()=>feature('采购文件提取',`<div class="extract-layout"><div class="document-preview"><div style="color:var(--ud-brand);font-weight:700;font-size:24px">政采云</div><h1>招标文件</h1><h3>${project.name}</h3><div class="doc-fields">项目编号：${project.code}<br>采购人：${project.buyer}<br>截止时间：${project.deadline}</div><div class="wave"></div></div><div class="parse-panel"><div class="parse-step"><h3>⌄ 招标文件解析 <span class="tag success" style="float:right">已完成</span></h3><p>解析文件封面、目录、正文、表格及附件内容</p><div class="progress success"><i style="width:100%"></i></div></div><div class="parse-step"><h3>⌄ 招标文章识别 <span class="spin" style="float:right"></span></h3><p>识别项目基本信息、采购需求、响应与评审规则</p><div class="progress"><i style="width:80%"></i></div></div><div class="parse-step"><h3>› 字段提取</h3><p>提取项目名称、采购方式、预算金额、时间信息</p><div class="progress"><i style="width:28%"></i></div></div><div class="parse-step"><h3>› 结果校验</h3><p>检测字段一致性与异常值</p><div class="progress"><i style="width:0%"></i></div></div></div></div>`);
+    const extractResult=()=>feature('采购文件提取',`<div class="alert success">● 已完成采购文件解析与字段提取，可核对后回填业务系统。</div><h2 class="project-heading" style="margin-top:20px">${project.name}</h2><p class="project-code">项目编号：${project.code}</p><div class="extract-result">${[
+      ['项目名称',project.name],['采购方式',project.method],['采购人',project.buyer],['代理机构',project.agency],['预算金额（元）',project.budget],['投标截止时间',project.deadline],['合同履约期限',project.delivery],['评分总分','100分']
+    ].map(x=>`<div class="field-card"><span>${x[0]}</span><b>${x[1]} <i class="ai-label">AI已提取</i></b></div>`).join('')}<div class="field-card warn"><span>采购清单金额校验</span><b>清单合计 286,000.00 元，与预算相差 2,000.00 元</b></div><div class="field-card"><span>采购清单</span><b>7 项办公设备</b></div></div><div class="bottom-actions">${btn('返回首页','goHome()',false)}${btn('一键回填业务系统',"openPage('host-filled')")}</div>`);
+    const simpleState=(service,type,title,desc,actions)=>feature(service,`<div class="center-state">${illus(type)}<h2 class="state-title">${title}</h2><p class="state-desc">${desc}</p><div class="actions">${actions}</div></div>`);
+    const inspectWait=()=>simpleState('采购文件检测','history','还未收到检测请求','请在返回业务系统点击「AI智能检测」按钮以发起检测',`${btn('返回首页','goHome()',false)}${btn('返回业务系统',"showToast('已模拟返回业务系统')")}`);
+    const inspectReady=()=>feature('采购文件检测',`<h2 class="project-heading">${project.name}</h2><div class="alert success">● 已完成文件解析与场景匹配，请确认后开始检测</div><div class="section"><h3 class="section-title">智能匹配场景 <button class="back" style="float:right" onclick="openDrawer()">手动选择审查项 ›</button></h3><div class="inline" style="gap:10px;flex-wrap:wrap"><span class="tag">政府</span><span class="tag">政府-公开招标</span><span class="tag">政府-单一来源</span><span class="tag">政府-竞争性磋商</span><span class="tag">政府-竞争性谈判</span></div></div><div class="section"><h3 class="section-title">待检测文件</h3><div class="queue-list">${['招标文件（模拟版）.docx','采购需求清单.xlsx','资格审查表.docx','评分办法.docx'].map(n=>`<div class="file-row"><div class="file-main">${icon('file',22)}<div>${n}<div class="file-meta">217 KB</div></div></div><span class="tag success">已准备</span><div class="progress success"><i style="width:100%"></i></div></div>`).join('')}</div></div><div class="bottom-actions">${btn('返回首页','goHome()',false)}${btn('▱ 确认并开始检测',"startLoading('采购文件检测')")}</div>`);
+    const loading=(service)=>feature(service,`<h2 class="project-heading">${project.name}</h2><p class="project-code">项目编号：${project.code}</p><div class="section"><h3 class="section-title">项目信息</h3><div class="info-grid"><div class="info-box"><span>项目金额（元）</span><b>${project.budget}</b></div><div class="info-box"><span>采购方式</span><b>${project.method}</b></div><div class="info-box"><span>采购目录</span><b>办公设备</b></div></div></div><div class="section"><h3 class="section-title">整体进度 <span class="tag" style="float:right">${service}执行中 <i class="spin"></i></span></h3><div class="pipeline-head"><div class="big-percent" id="bigPercent">${state.progress}%</div><div class="info-box"><span>执行耗时</span><b id="elapsed">41秒</b></div><div class="info-box"><span>完成进度</span><b>2 / 4</b></div><div class="info-box"><span>识别项进度</span><b>9 / 18</b></div></div><p class="current-line">当前任务：正在同步当前阶段的检测上下文…</p><div class="task-list"><div class="task done"><b>100%</b><div><strong>项目数据提取</strong><p>已完成项目数据提取</p><div class="progress success"><i style="width:100%"></i></div></div><span class="task-status">已完成</span></div><div class="task done"><b>100%</b><div><strong>文件解析</strong><p>已完成文件解析</p><div class="progress success"><i style="width:100%"></i></div></div><span class="task-status">已完成</span></div><div class="task active"><b id="activePercent">80%</b><div><strong>${service==='采购文件检测'?'规则判定':'标项内容 + 供应商内容'}</strong><p>正在执行资格审查、符合性审查与商务技术分析</p><div class="progress"><i id="activeBar" style="width:80%"></i></div></div><span class="task-status">执行中</span></div><div class="task"><b>0%</b><div><strong>结果汇总</strong><p>等待执行结果汇总</p><div class="progress"><i></i></div></div><span class="task-status">等待执行</span></div></div></div>`);
+    const inspectResult=()=>feature('采购文件检测',`<h2 class="project-heading">${project.name}</h2><p class="project-code">项目编号：${project.code}</p><div class="result-summary"><div class="metric-card"><span class="tag error">有问题</span><div class="metric">2</div><b>发现问题</b><p>共 42 条规则中发现 2 项问题</p></div><div class="metric-card good"><span class="tag success">状态良好</span><div class="metric">40</div><b>无风险项</b><p>共 42 条规则中无风险 40 项</p></div></div><div class="note">本次检测共发现 2 项问题、无风险 40 项。结果已关联招标文件原文与业务字段，可逐项核验。</div><div class="risk-card"><div class="risk-head"><span><span class="tag">线上表单</span> 来源：采购文件 / 投标截止时间</span><span class="tag error">有风险</span></div><h3>投标保证金到账截止时间与投标截止时间不一致</h3><div class="evidence"><small>问题说明</small>保证金到账截止时间早于投标截止时间，两者设置不一致。</div><div class="evidence"><small>依据</small>《政府采购货物和服务招标投标管理办法》相关条款。</div><div class="evidence"><small>修改建议</small>统一相关截止时间，并重新核对招标文件与系统字段。</div></div>`);
+    const collusionResult=()=>feature('围串标审查',`<h2 class="project-heading">${project.name}－围串标审查</h2><p class="project-code">分析时间 2026-07-17 11:30:00　执行耗时 2分30秒</p><div class="alert error"><b>总体结论：</b> 3 家供应商在主体关系、联系方式、投标文件特征与报价异常等维度存在异常聚集，建议重点复核。</div><div class="info-grid" style="margin-top:16px"><div class="info-box"><span>异常供应商数</span><b style="font-size:30px;color:#e62448">3</b></div><div class="info-box"><span>风险识别项数</span><b style="font-size:30px;color:#e62448">8</b></div><div class="info-box"><span>异常问题数</span><b style="font-size:30px;color:#e62448">17</b></div></div><div class="section"><h3 class="section-title">综合结果分析</h3><div class="vendor-tabs"><button class="vendor active">供应商 A</button><button class="vendor">供应商 B</button><button class="vendor">供应商 C</button></div><div class="risk-card"><h3>重点发现</h3><div class="evidence">01　两家供应商注册地址完全一致，存在同一主体操控投标的可能。</div><div class="evidence">02　两家供应商通讯地址高度相似，进一步指向地址关联风险。</div></div><div class="result-summary" style="margin-top:16px"><div class="risk-card"><h3>风险分布摘要</h3><p>风险主要集中在注册地址、通讯地址、社保账户、联系人及报价等维度。</p></div><div class="risk-card"><h3>复核建议</h3><p>重点核查供应商之间的注册地、通讯地、社保税务账户及项目联系人关联性。</p></div></div></div>`);
+    const evaluationResult=()=>feature('辅助评标',`<div class="alert success"><span class="tag success">已完成</span> 辅助评标结果已生成，可查看评审依据、材料关联与页码定位 <span class="tag">评审耗时：10分10秒</span></div><div class="alert warning" style="margin-top:12px">内容由AI生成，仅供参考，请注意核实。</div><div class="vendor-tabs" style="margin-top:16px"><button class="vendor active">供应商 A</button><button class="vendor">供应商 B</button><button class="vendor">供应商 C</button></div><div class="tabs"><button class="tab active">资格审查项</button><button class="tab">符合性审查项</button><button class="tab">商务技术评审项</button></div><div class="criteria">${['具有独立承担民事责任的能力','具有良好的商业信誉和健全的财务会计制度','具有履行合同所必需的设备和专业技术能力','参加政府采购活动前三年内无重大违法记录','法律、行政法规规定的其他条件','联合体投标授权书'].map((x,i)=>`<div class="criterion"><h3>${i+1}. ${x} <span style="float:right;color:#8da0bb">⌄</span></h3><p><b>评审描述</b><br>${i===0?'法人或其他组织的营业执照等证明文件，自然人的身份证明':i===5?'授权委托书，格式以采购文件为准':'相关证明材料已在投标文件中定位，可点击查看原文页码'}</p></div>`).join('')}</div>`);
+    const queue=()=>simpleState('围串标审查','queue','当前任务较多，已为你排队','请保持页面打开，无需重复提交<br><br><span class="info-box" style="display:inline-block">当前排队　<b style="color:var(--ud-brand);font-size:20px">第 3 位</b></span>',btn('取消排队并返回首页','goHome()',false));
+    const timeout=()=>simpleState('采购文件提取','fail','本次执行超时','本次未生成有效结果，请重新发起服务。',`${btn('返回首页','goHome()',false)}${btn('重新发起',"openPage('extract-upload')")}`);
+    const history=()=>simpleState('采购文件提取','history','暂无提取记录','该项目在文件编制阶段未使用过采购文件提取服务，暂无历史记录可供查看。',btn('返回首页','goHome()'));
+    const hostPage=(filled=false)=>feature('',`<div class="host-page"><div class="host-grid"><aside class="host-side"><b>项目管理</b><div>采购方案管理</div><div>生成项目</div><div class="active">采购文件管理</div><div>采购信息发布</div><div>开评标管理</div><div>采购结果管理</div><div>合同管理</div></aside><div class="host-main"><div class="host-banner"><h2>${filled?'采购文件内容':project.name}</h2><p>项目编号：${project.code}　采购人：${project.buyer}　采购方式：${project.method}</p></div><div class="host-content">${filled?`<table class="form-table"><tr><td>项目名称</td><td>${project.name}<span class="ai-label">AI已回填</span></td><td>是否预留项目</td><td>否</td></tr><tr><td>采购计划文号</td><td>2026999900000002-007</td><td>采购单位</td><td>${project.buyer}</td></tr><tr><td>最高限价(元)</td><td>${project.budget}<span class="ai-label">AI已回填</span></td><td>合同履约期限</td><td>${project.delivery}<span class="ai-label">AI已回填</span></td></tr><tr><td>简要规格描述</td><td colspan="3">采购一批办公电脑、打印机、复印机、会议投影仪等办公设备，含运输、安装、调试、质保、售后全套服务<span class="ai-label">AI已回填</span></td></tr></table>`:`<div class="alert success">采购文件已通过内部审核，可继续发布采购信息。</div><div class="section"><h3>采购文件内容</h3>${['规则设置','合同模板','基础信息','公告信息','形式评审要求','资格审查响应项','响应性评审响应项'].map(x=>`<div class="file-row" style="grid-template-columns:1fr 30px;border-bottom:1px solid #eee"><div>●　${x}</div><span>›</span></div>`).join('')}</div>`}</div></div></div></div>`);
+
+    function render(){
+      clearTimer();
+      let html='';
+      switch(state.page){
+        case 'home':html=home();break;
+        case 'extract-upload':html=extractUpload();break;case 'extract-loading':html=extractLoading();startProgress('extract-result');break;case 'extract-result':html=extractResult();break;case 'extract-fail':html=simpleState('采购文件提取','fail','文件提取失败','请重新上传后重试',`${btn('返回首页','goHome()',false)}${btn('重新上传',"openPage('extract-upload')")}`);break;
+        case 'inspect-wait':html=inspectWait();break;case 'inspect-ready':html=inspectReady();break;case 'inspect-loading':html=loading('采购文件检测');startProgress('inspect-result');break;case 'inspect-result':html=inspectResult();break;
+        case 'recommend-ready':html=readyPage('内容推荐','智能章节推荐','快速生成合规章节',[['场景匹配','根据采购方式匹配推荐章节'],['引用溯源','每条内容保留规范来源'],['人工编辑','推荐结果可直接修改与采用']]);break;
+        case 'recommend-result':html=feature('内容推荐',`<h2 class="project-heading">智能章节推荐</h2><div class="alert success">已根据公开招标场景完成章节推荐</div><div class="criteria" style="margin-top:16px">${['投标人资格要求','符合性审查标准','评标方法与评分细则','合同主要条款','质疑与投诉处理'].map((x,i)=>`<div class="criterion"><h3>${i+1}. ${x}<span class="tag success" style="float:right">已推荐</span></h3><p>基于本项目采购方式、采购内容与政府采购规范生成，采用前请人工核验。</p></div>`).join('')}</div>`);break;
+        case 'collusion-ready':html=readyPage('围串标审查','围串标审查','让隐性关联无处遁形',[['深度关联穿透','自动比对股权、法人、经办人、地址与联系方式'],['异常特征识别','识别投标文件雷同、制作信息与报价异常'],['证据链留痕','可疑线索附完整数据与出处']]);break;case 'collusion-loading':html=loading('围串标审查');startProgress('collusion-result');break;case 'collusion-result':html=collusionResult();break;
+        case 'evaluate-ready':html=readyPage('辅助评标','AI 辅助评标','让评审更专业、更高效',[['精准审查','逐项对照招标要求，不漏一条评审项'],['高效评审','材料自动检索定位，关键条款秒级触达'],['全程留痕','每条结论附材料出处与页码引用']]);break;case 'evaluate-loading':html=loading('辅助评标');startProgress('evaluate-result');break;case 'evaluate-result':html=evaluationResult();break;
+        case 'queue':html=queue();break;case 'timeout':html=timeout();break;case 'history':html=history();break;case 'unavailable':html=unavailable(state.service||'围串标审查');break;
+        case 'host-tip':html=hostPage(false);setTimeout(()=>showToast('<b style="color:#394cff">✦ 云随免费试用 3 个月</b><br><span style="color:#777">可体验采购文件提取、检测等能力</span>'),120);break;case 'host-filled':html=hostPage(true);break;
+        default:html=home();
+      }
+      document.getElementById('workbench').innerHTML=html;
+      refreshControls();
+    }
+    function openService(id){
+      const s=SERVICES.find(x=>x.id===id);state.service=s.title;
+      if(!available(s)){state.page='unavailable'}
+      else if(id==='extract')state.page='extract-upload';else if(id==='inspect')state.page='inspect-wait';else state.page=id+'-ready';
+      render();
+    }
+    function startLoading(service){
+      state.progress=30;
+      if(service==='采购文件提取')state.page='extract-loading';else if(service==='采购文件检测')state.page='inspect-loading';else if(service==='围串标审查')state.page='collusion-loading';else if(service==='辅助评标')state.page='evaluate-loading';else state.page='recommend-result';
+      render();
+    }
+    function startProgress(next){
+      let p=30,elapsed=41;
+      state.timer=setInterval(()=>{p=Math.min(100,p+10);elapsed+=8;state.progress=p;const big=document.getElementById('bigPercent'),active=document.getElementById('activePercent'),bar=document.getElementById('activeBar'),el=document.getElementById('elapsed');if(big)big.textContent=p+'%';if(active)active.textContent=Math.min(100,p+50)+'%';if(bar)bar.style.width=Math.min(100,p+50)+'%';if(el)el.textContent=elapsed+'秒';if(p>=100){clearTimer();setTimeout(()=>openPage(next),450)}},650);
+    }
+    function clearTimer(){if(state.timer){clearInterval(state.timer);state.timer=null}}
+    function openPage(page){state.page=page;render()}
+    function goHome(){state.page='home';state.service=null;render()}
+    function showUnavailable(service){state.service=service;state.page='unavailable';render()}
+    function openDrawer(){state.drawer=true;const stage=document.getElementById('stage');stage.insertAdjacentHTML('beforeend',`<div class="drawer-mask" id="drawerMask"></div><div class="drawer" id="drawer"><div class="drawer-head"><span>手动选择审查项</span><button class="close-btn" style="color:#555" onclick="closeDrawer()">×</button></div><div class="drawer-body"><div class="section"><h3 class="section-title">推荐场景</h3><div class="inline" style="gap:10px;flex-wrap:wrap"><span class="tag">政府 ×</span><span class="tag">政府-公开招标 ×</span><span class="tag">政府-单一来源 ×</span><span class="tag">政府-竞争性磋商 ×</span><span class="tag">政府-竞争性谈判 ×</span></div></div>${[1,2,3,4,5,6].map((n,i)=>`<div class="check-group"><div class="check-title"><input type="checkbox" ${i<2?'checked':''}> 审查类别名称${n}</div>${i<2?`<div class="check-grid">${[1,2,3].map((x,j)=>`<div class="check-item"><label><input type="checkbox" ${j<2?'checked':''}><span>数字、金额、日期等关键信息是否存在书写错误</span></label><p><span class="tag">政府</span><span class="tag">公开招标</span></p></div>`).join('')}</div>`:''}</div>`).join('')}</div><div class="drawer-foot"><span>☑ 全选　已选中 98 项，共 100 项目</span><div class="actions">${btn('取消','closeDrawer()',false,'small')}${btn('确定','closeDrawer()',true,'small')}</div></div></div>`);}
+    function closeDrawer(){document.getElementById('drawer')?.remove();document.getElementById('drawerMask')?.remove();state.drawer=false}
+    function showToast(message){const t=document.getElementById('toast');t.innerHTML=message;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200)}
+    function toggleControl(show){document.getElementById('control').style.display=show?'block':'none';document.getElementById('controlHandle').style.display=show?'none':'block'}
+    function setStage(s){state.stage=s;goHome()}
+    function setRole(r){state.role=r;goHome()}
+    function refreshControls(){
+      document.getElementById('stageButtons').innerHTML=STAGES.map(s=>`<button class="${s===state.stage?'active':''}" onclick="setStage('${s}')">${s}</button>`).join('');
+      document.getElementById('roleButtons').innerHTML=ROLES.map(r=>`<button class="${r===state.role?'active':''}" onclick="setRole('${r}')">${r}</button>`).join('');
+      const sel=document.getElementById('shortcut');sel.innerHTML=shortcuts.map(x=>`<option value="${x[0]}" ${x[0]===state.page?'selected':''}>${x[1]}</option>`).join('');
+    }
+    function fit(){document.documentElement.style.setProperty('--scale',Math.min(window.innerWidth/1440,window.innerHeight/900).toFixed(4))}
+    Object.assign(window,{openService,startLoading,openPage,goHome,showUnavailable,openDrawer,closeDrawer,showToast,toggleControl,setStage,setRole});
+    document.getElementById('shortcut').addEventListener('change',e=>openPage(e.target.value));
+    document.getElementById('filePicker').addEventListener('change',()=>startLoading('采购文件提取'));
+    window.addEventListener('resize',fit);fit();render();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "source": "Tencent/tdesign-react Empty component assets",
+  "sourceUrl": "https://github.com/Tencent/tdesign-react",
+  "component": "packages/components/empty",
+  "snapshotCommit": "9fae989e9bdf13234ec0958f786d62aba3af5f2a",
+  "downloadedAt": "2026-07-15",
+  "license": "MIT, see LICENSE",
+  "illustrations": {
+    "empty": "empty.svg",
+    "success": "success.svg",
+    "fail": "fail.svg",
+    "network-error": "network-error.svg",
+    "maintenance": "maintenance.svg"
+  },
+  "usageBoundary": "Only use as generic low-emphasis fallback for empty/status pages when formal Figma or project illustration assets are unavailable."
+}

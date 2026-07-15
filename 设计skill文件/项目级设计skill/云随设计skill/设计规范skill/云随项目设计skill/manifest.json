@@ -1,0 +1,20 @@
+{
+  "id": "yunsui-design",
+  "name": "乐采云随项目级设计 Skill",
+  "shortName": "云随设计 Skill",
+  "version": "0.1.2",
+  "category": "project-design",
+  "status": "pilot",
+  "owner": "蒋子杰",
+  "description": "用于乐采云随项目页面生成、改造、评审和设计缺口识别的项目级设计 Skill。",
+  "outputs": [
+    "single-html-demo",
+    "demo-review",
+    "design-gap-report"
+  ],
+  "updatedAt": "2026-07-15",
+  "entry": "SKILL.md",
+  "agentConfig": "agents/openai.yaml",
+  "readme": "README.md",
+  "changelog": "CHANGELOG.md"
+}
